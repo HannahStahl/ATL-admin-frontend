@@ -3,11 +3,13 @@ import { PageHeader } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import Table from "../components/Table";
 
-export default function Roster() {
+export default () => {
   const { locations, setLocations } = useAppContext();
   // TODO add other columns/fields
   const columns = {
-    locationName: "Name",
+    locationName: {
+      label: "Name"
+    },
   };
   const fields = [
     {

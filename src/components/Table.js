@@ -5,7 +5,7 @@ import LoaderButton from './LoaderButton';
 import './Table.css';
 import EditForm from '../containers/EditForm';
 
-export default ({ columns, rows, setRows, itemType, fields }) => {
+export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => {
   const [rowSelectedForEdit, setRowSelectedForEdit] = useState(undefined);
   const [rowSelectedForRemoval, setRowSelectedForRemoval] = useState(undefined);
   const [addingRow, setAddingRow] = useState(false);
@@ -46,34 +46,48 @@ export default ({ columns, rows, setRows, itemType, fields }) => {
 
   const capitalizedItemType = itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
+  const getValueFromJoiningTable = (key, row) => {
+    const { joiningTable, joiningTableKey, joiningTableFieldName } = columns[key];
+    const value = joiningTables[joiningTable].find((item) => item[joiningTableKey] === row[key]);
+    return value ? value[joiningTableFieldName] : '';
+  };
+
   return (
     <>
       <div className="table-container">
-        <Table bordered hover>
+        <Table bordered hover className={fields ? 'interactive-table' : undefined}>
           <thead>
             <tr>
-              {Object.keys(columns).map((key) => <th key={key}>{columns[key]}</th>)}
-              <th />
+              {Object.keys(columns).map((key) => <th key={key}>{columns[key].label}</th>)}
+              {fields && <th />}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr
                 key={row[`${itemType}Id`]}
-                onClick={(e) => {
+                onClick={fields ? (e) => {
                   if (!e.target.className.includes("fas")) setRowSelectedForEdit(row);
-                }}
+                } : undefined}
               >
-                {Object.keys(columns).map((key) => <td key={key}>{row[key]}</td>)}
-                <td className="remove-row">
-                  <i className="fas fa-times-circle" onClick={() => setRowSelectedForRemoval(row)} />
-                </td>
+                {Object.keys(columns).map((key) => (
+                  <td key={key}>
+                    {columns[key].joiningTable ? getValueFromJoiningTable(key, row) : row[key]}
+                  </td>
+                ))}
+                {fields && (
+                  <td className="remove-row">
+                    <i className="fas fa-times-circle" onClick={() => setRowSelectedForRemoval(row)} />
+                  </td>
+                )}
               </tr>
             ))}
             <tr>
-              <td colSpan={Object.keys(columns).length + 1} onClick={() => setAddingRow(true)}>
-                {`+ Add new ${itemType}`}
-              </td>
+              {fields && (
+                <td colSpan={Object.keys(columns).length + 1} onClick={() => setAddingRow(true)}>
+                  {`+ Add new ${itemType}`}
+                </td>
+              )}
             </tr>
           </tbody>
         </Table>

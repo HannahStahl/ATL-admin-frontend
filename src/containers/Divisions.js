@@ -3,10 +3,12 @@ import { PageHeader } from "react-bootstrap";
 import { useAppContext } from "../libs/contextLib";
 import Table from "../components/Table";
 
-export default function Roster() {
+export default () => {
   const { divisions, setDivisions } = useAppContext();
   const columns = {
-    divisionNumber: "Number",
+    divisionNumber: {
+      label: "Number"
+    },
   };
   const fields = [
     {

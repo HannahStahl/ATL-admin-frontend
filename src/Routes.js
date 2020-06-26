@@ -10,6 +10,7 @@ import Signup from "./containers/Signup";
 import Profile from "./containers/Profile";
 import Locations from "./containers/Locations";
 import Divisions from "./containers/Divisions";
+import Schedules from "./containers/Schedules";
 import NotFound from "./containers/NotFound";
 
 export default function Routes() {
@@ -29,6 +30,9 @@ export default function Routes() {
       </AuthenticatedRoute>
       <AuthenticatedRoute exact path="/court-locations">
         <Locations />
+      </AuthenticatedRoute>
+      <AuthenticatedRoute exact path="/match-schedules">
+        <Schedules />
       </AuthenticatedRoute>
       <AuthenticatedRoute exact path="/divisions">
         <Divisions />

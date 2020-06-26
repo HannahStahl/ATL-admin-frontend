@@ -15,9 +15,6 @@ function App() {
   const [isAuthenticated, userHasAuthenticated] = useState(false);
   const [profile, setProfile] = useState({});
   const [teams, setTeams] = useState([]);
-  const [players, setPlayers] = useState([]);
-  const [captains, setCaptains] = useState([]);
-  const [users, setUsers] = useState([]);
   const [matches, setMatches] = useState([]);
   const [locations, setLocations] = useState([]);
   const [divisions, setDivisions] = useState([]);
@@ -28,28 +25,20 @@ function App() {
 
   useEffect(() => {
     async function fetchData() {
-      const [players, captains, teams, matches, users, userProfile, locations, divisions] = await Promise.all([
-        fetch(`${config.captainApi}/list/player`).then((res) => res.json()),
-        fetch(`${config.captainApi}/list/captain`).then((res) => res.json()),
+      const [teams, matches, profile, locations, divisions] = await Promise.all([
         fetch(`${config.captainApi}/list/team`).then((res) => res.json()),
         fetch(`${config.captainApi}/list/match`).then((res) => res.json()),
-        API.get("atl-backend", "list/user"),
         API.get("atl-backend", "getUser"),
         API.get("atl-backend", "list/location"),
         API.get("atl-backend", "list/division"),
       ]);
-      setPlayers(players);
-      setCaptains(captains);
       setTeams(teams);
       setMatches(matches);
-      setUsers(users);
-      setProfile(userProfile);
+      setProfile(profile);
       setLocations(locations);
       setDivisions(divisions);
     }
-    if (isAuthenticated) {
-      fetchData();
-    }
+    if (isAuthenticated) fetchData();
   }, [isAuthenticated]);
 
   async function onLoad() {
@@ -94,6 +83,7 @@ function App() {
                   >
                     <MenuItem href="/user-profile">My Profile</MenuItem>
                     <MenuItem href="/court-locations">Court Locations</MenuItem>
+                    <MenuItem href="/match-schedules">Match Schedules</MenuItem>
                     <MenuItem href="/divisions">Divisions</MenuItem>
                     <MenuItem onClick={handleLogout}>Log out</MenuItem>
                   </NavDropdown>
@@ -115,17 +105,12 @@ function App() {
             userHasAuthenticated,
             profile,
             setProfile,
-            players,
-            setPlayers,
+            teams,
             matches,
-            setMatches,
-            captains,
             locations,
             setLocations,
             divisions,
             setDivisions,
-            teams,
-            users,
           }}>
             <div className="container"><Routes /></div>
           </AppContext.Provider>

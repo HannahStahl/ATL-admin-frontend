@@ -95,7 +95,7 @@ input.form-control {
 }
 
 @media all and (hover: hover) {
-  tr:hover {
+  .interactive-table tr:hover {
     cursor: pointer;
   }
 }
