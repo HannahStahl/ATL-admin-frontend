@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 
-export default ({ originalLocation, saveLocation, isLoading }) => {
-  const [location, setLocation] = useState(originalLocation || {});
+export default ({ original, save, isLoading }) => {
+  const [location, setLocation] = useState(original || {});
 
   const validateForm = () => location.locationName?.length > 0;
 
   return (
-    <form onSubmit={(e) => saveLocation(e, location)}>
+    <form onSubmit={(e) => save(e, location)}>
       <FormGroup controlId="locationName">
         <ControlLabel>Name</ControlLabel>
         <FormControl

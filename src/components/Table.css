@@ -1,0 +1,7 @@
+.table-container {
+  overflow-x: scroll;
+}
+
+.remove-row {
+  width: 30px;
+}

@@ -2,13 +2,13 @@ import React, { useState } from "react";
 import { FormGroup, ControlLabel, FormControl } from "react-bootstrap";
 import LoaderButton from "../components/LoaderButton";
 
-export default ({ originalDivision, saveDivision, isLoading }) => {
-  const [division, setDivision] = useState(originalDivision || {});
+export default ({ original, save, isLoading }) => {
+  const [division, setDivision] = useState(original || {});
 
   const validateForm = () => division.divisionNumber?.length > 0;
 
   return (
-    <form onSubmit={(e) => saveDivision(e, division)}>
+    <form onSubmit={(e) => save(e, division)}>
       <FormGroup controlId="divisionNumber">
         <ControlLabel>Division Number</ControlLabel>
         <FormControl
