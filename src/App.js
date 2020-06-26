@@ -26,10 +26,8 @@ function App() {
     onLoad();
   }, []);
 
-  async function onLoad() {
-    try {
-      await Auth.currentSession();
-      userHasAuthenticated(true);
+  useEffect(() => {
+    async function fetchData() {
       const [players, captains, teams, matches, users, userProfile, locations, divisions] = await Promise.all([
         fetch(`${config.captainApi}/list/player`).then((res) => res.json()),
         fetch(`${config.captainApi}/list/captain`).then((res) => res.json()),
@@ -48,6 +46,16 @@ function App() {
       setProfile(userProfile);
       setLocations(locations);
       setDivisions(divisions);
+    }
+    if (isAuthenticated) {
+      fetchData();
+    }
+  }, [isAuthenticated]);
+
+  async function onLoad() {
+    try {
+      await Auth.currentSession();
+      userHasAuthenticated(true);
     }
     catch(e) {
       if (e !== 'No current user') onError(e);
@@ -73,7 +81,7 @@ function App() {
           </Navbar.Header>
           <Navbar.Collapse>
             <Nav pullRight>
-              {isAuthenticated && profile.userId ? (
+              {profile.userId ? (
                 <>
                   <NavDropdown
                     title={(
