@@ -87,6 +87,7 @@ function App() {
                   >
                     <MenuItem href="/user-profile">My Profile</MenuItem>
                     <MenuItem href="/court-locations">Court Locations</MenuItem>
+                    <MenuItem href="/divisions">Divisions</MenuItem>
                     <MenuItem onClick={handleLogout}>Log out</MenuItem>
                   </NavDropdown>
                 </>
