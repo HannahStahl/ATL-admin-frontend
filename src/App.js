@@ -7,7 +7,6 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { AppContext } from "./libs/contextLib";
 import { onError } from "./libs/errorLib";
 import Routes from "./Routes";
-import "./App.css";
 import config from './config';
 
 function App() {
