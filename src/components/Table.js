@@ -3,8 +3,9 @@ import { API } from 'aws-amplify';
 import { Table, Modal } from 'react-bootstrap';
 import LoaderButton from './LoaderButton';
 import './Table.css';
+import EditForm from '../containers/EditForm';
 
-export default ({ columns, rows, setRows, itemType, EditForm }) => {
+export default ({ columns, rows, setRows, itemType, fields }) => {
   const [rowSelectedForEdit, setRowSelectedForEdit] = useState(undefined);
   const [rowSelectedForRemoval, setRowSelectedForRemoval] = useState(undefined);
   const [addingRow, setAddingRow] = useState(false);
@@ -82,7 +83,7 @@ export default ({ columns, rows, setRows, itemType, EditForm }) => {
           <Modal.Title>{`Edit ${capitalizedItemType} Details`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditForm original={rowSelectedForEdit} save={editRow} isLoading={isLoading} />
+          <EditForm fields={fields} original={rowSelectedForEdit} save={editRow} isLoading={isLoading} />
         </Modal.Body>
       </Modal>
       <Modal show={addingRow} onHide={() => setAddingRow(false)}>
@@ -90,7 +91,7 @@ export default ({ columns, rows, setRows, itemType, EditForm }) => {
           <Modal.Title>{`Add New ${capitalizedItemType}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditForm save={addRow} isLoading={isLoading} />
+          <EditForm fields={fields} save={addRow} isLoading={isLoading} />
         </Modal.Body>
       </Modal>
       <Modal show={rowSelectedForRemoval !== undefined} onHide={() => setRowSelectedForRemoval(undefined)}>
