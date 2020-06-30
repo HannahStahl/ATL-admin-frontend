@@ -8,23 +8,19 @@ export default () => {
   const [location, setLocation] = useState({});
 
   const columns = {
-    weekNumber: {
-      label: "Week"
-    },
-    "startTime": {
-      label: "Start Time"
-    },
+    weekNumber: { label: "Week" },
+    "startTime": { label: "Start Time" },
     homeTeamId: {
       label: "Home Team",
       joiningTable: "teams",
       joiningTableKey: "teamId",
-      joiningTableFieldName: "teamName"
+      joiningTableFieldNames: ["teamName"]
     },
     visitorTeamId: {
       label: "Visiting Team",
       joiningTable: "teams",
       joiningTableKey: "teamId",
-      joiningTableFieldName: "teamName"
+      joiningTableFieldNames: ["teamName"]
     },
   };
 
@@ -32,7 +28,7 @@ export default () => {
 
   return (
     <div>
-      <PageHeader>Matches</PageHeader>
+      <PageHeader>Match Schedules</PageHeader>
       <form>
         <FormGroup controlId="locationId">
           <FormControl
@@ -48,7 +44,7 @@ export default () => {
         </FormGroup>
       </form>
       {matchesForLocation.length > 0 && (
-        <Table columns={columns} rows={matchesForLocation} itemType="match" joiningTables={{ locations, teams }} />
+        <Table columns={columns} rows={matchesForLocation} itemType="match" joiningTables={{ teams }} />
       )}
     </div>
   );

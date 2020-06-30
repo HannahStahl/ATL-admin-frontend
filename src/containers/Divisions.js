@@ -6,23 +6,13 @@ import Table from "../components/Table";
 export default () => {
   const { divisions, setDivisions } = useAppContext();
   const columns = {
-    divisionNumber: {
-      label: "Number"
-    },
+    divisionNumber: { label: "Number", type: "number", required: true },
   };
-  const fields = [
-    {
-      key: "divisionNumber",
-      label: "Number",
-      type: "text",
-      required: true,
-    }
-  ];
 
   return (
     <div>
       <PageHeader>Divisions</PageHeader>
-      <Table columns={columns} rows={divisions} setRows={setDivisions} itemType="division" fields={fields} />
+      <Table columns={columns} rows={divisions} setRows={setDivisions} itemType="division" />
     </div>
   );
 }

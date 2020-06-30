@@ -2,10 +2,9 @@ import React, { useState } from 'react';
 import { API } from 'aws-amplify';
 import { Table, Modal } from 'react-bootstrap';
 import LoaderButton from './LoaderButton';
-import './Table.css';
-import EditForm from '../containers/EditForm';
+import EditForm from './EditForm';
 
-export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => {
+export default ({ columns, rows, setRows, itemType, joiningTables }) => {
   const [rowSelectedForEdit, setRowSelectedForEdit] = useState(undefined);
   const [rowSelectedForRemoval, setRowSelectedForRemoval] = useState(undefined);
   const [addingRow, setAddingRow] = useState(false);
@@ -47,26 +46,26 @@ export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => 
   const capitalizedItemType = itemType.charAt(0).toUpperCase() + itemType.slice(1);
 
   const getValueFromJoiningTable = (key, row) => {
-    const { joiningTable, joiningTableKey, joiningTableFieldName } = columns[key];
+    const { joiningTable, joiningTableKey, joiningTableFieldNames } = columns[key];
     const value = joiningTables[joiningTable].find((item) => item[joiningTableKey] === row[key]);
-    return value ? value[joiningTableFieldName] : '';
+    return value ? joiningTableFieldNames.map((key) => value[key]).join(' ') : '';
   };
 
   return (
     <>
       <div className="table-container">
-        <Table bordered hover className={fields ? 'interactive-table' : undefined}>
+        <Table bordered hover className={setRows ? 'interactive-table' : undefined}>
           <thead>
             <tr>
               {Object.keys(columns).map((key) => <th key={key}>{columns[key].label}</th>)}
-              {fields && <th />}
+              {setRows && <th />}
             </tr>
           </thead>
           <tbody>
             {rows.map((row) => (
               <tr
                 key={row[`${itemType}Id`]}
-                onClick={fields ? (e) => {
+                onClick={setRows ? (e) => {
                   if (!e.target.className.includes("fas")) setRowSelectedForEdit(row);
                 } : undefined}
               >
@@ -75,7 +74,7 @@ export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => 
                     {columns[key].joiningTable ? getValueFromJoiningTable(key, row) : row[key]}
                   </td>
                 ))}
-                {fields && (
+                {setRows && (
                   <td className="remove-row">
                     <i className="fas fa-times-circle" onClick={() => setRowSelectedForRemoval(row)} />
                   </td>
@@ -83,7 +82,7 @@ export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => 
               </tr>
             ))}
             <tr>
-              {fields && (
+              {setRows && (
                 <td colSpan={Object.keys(columns).length + 1} onClick={() => setAddingRow(true)}>
                   {`+ Add new ${itemType}`}
                 </td>
@@ -97,7 +96,13 @@ export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => 
           <Modal.Title>{`Edit ${capitalizedItemType} Details`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditForm fields={fields} original={rowSelectedForEdit} save={editRow} isLoading={isLoading} />
+          <EditForm
+            fields={columns}
+            original={rowSelectedForEdit}
+            save={editRow}
+            isLoading={isLoading}
+            joiningTables={joiningTables}
+          />
         </Modal.Body>
       </Modal>
       <Modal show={addingRow} onHide={() => setAddingRow(false)}>
@@ -105,7 +110,12 @@ export default ({ columns, rows, setRows, itemType, fields, joiningTables }) => 
           <Modal.Title>{`Add New ${capitalizedItemType}`}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <EditForm fields={fields} save={addRow} isLoading={isLoading} />
+          <EditForm
+            fields={columns}
+            save={addRow}
+            isLoading={isLoading}
+            joiningTables={joiningTables}
+          />
         </Modal.Body>
       </Modal>
       <Modal show={rowSelectedForRemoval !== undefined} onHide={() => setRowSelectedForRemoval(undefined)}>

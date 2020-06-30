@@ -79,6 +79,14 @@ input.form-control {
   animation: spin 1s infinite linear;
 }
 
+.table-container {
+  overflow-x: scroll;
+}
+
+.remove-row {
+  width: 30px;
+}
+
 @keyframes spin {
   from { transform: scale(1) rotate(0deg); }
   to { transform: scale(1) rotate(360deg); }
